@@ -98,9 +98,6 @@ public class Server implements Runnable {
             // add newUser message to list
             this.clients.add(newUser);
 
-            // Welcome msg
-            newUser.getOutStream().println("<b>Welcome</b> " + newUser + "<b>!</b>");
-
             // create a new thread for newUser incoming messages handling
             new Thread(new UserHandler(this, newUser)).start();
         }
@@ -143,9 +140,10 @@ class UserHandler implements Runnable {
         // when there is a new message, broadcast to all
         Scanner sc = new Scanner(this.user.getInputStream());
         while (sc.hasNextLine()) {
+            long start = System.currentTimeMillis();
             message = sc.nextLine();
             // broadcast the message to all users
-            server.broadcastMessages(message, user);
+            server.broadcastMessages(message+" ("+(System.currentTimeMillis()-start)+"ms)", user);
         }
         // end of Thread
         server.removeUser(user);

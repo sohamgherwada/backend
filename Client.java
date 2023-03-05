@@ -55,17 +55,21 @@ public class Client implements Runnable {
         // connect client to server
         SSLSocket client = null;
         SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        long start = 0;
         try {
             client = (SSLSocket) factory.createSocket(host, port);
             client.setEnabledCipherSuites(ciphersuites); // only 256-bit ciphers and above
             client.setUseClientMode(true); // force it to client mode
             System.out.println("Starting handshake...");
+            start = System.currentTimeMillis();
             client.startHandshake();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }
-        System.out.println("Client successfully connected to server!");
+        System.out.println("Client successfully connected to server!\n" +
+                "Handshake -> Connection: "
+                + (System.currentTimeMillis() - start) + "ms");
         // Get Socket output stream (where the client send her msg)
         PrintStream output = null;
         try {
@@ -77,7 +81,9 @@ public class Client implements Runnable {
 
         // ask for a nickname
         Scanner sc = new Scanner(System.in);
+
         System.out.print("Enter a nickname: ");
+
         String nickname = sc.nextLine();
 
         // send nickname to server
@@ -133,7 +139,7 @@ class MHandle implements Runnable {
                 );
             }else{
                 try {
-                    System.out.println("\n" + getTagValue(tmp));
+                    System.out.println(getTagValue(tmp));
                     // System.out.println(tmp);
                 } catch(Exception ignore){}
             }
