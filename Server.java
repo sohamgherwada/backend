@@ -11,8 +11,6 @@ import javax.net.ssl.SSLServerSocketFactory;
 
 
 public class Server implements Runnable {
-
-
     private int port;
     private List<User> clients;
     private SSLServerSocket server;
@@ -48,6 +46,10 @@ public class Server implements Runnable {
                     "TLS_EMPTY_RENEGOTIATION_INFO_SCSV"};
 
     public static void main(String[] args) {
+        System.setProperty("javax.net.ssl.keyStore", "serverkeystore.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "password");
+        System.setProperty("javax.net.ssl.trustStore", "clienttruststore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword","password");
         new Server(5000).run();
     }
 
@@ -58,6 +60,10 @@ public class Server implements Runnable {
     }
 
     public void run() {
+        System.setProperty("javax.net.ssl.keyStore", "serverkeystore.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "password");
+        System.setProperty("javax.net.ssl.trustStore", "clienttruststore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword","password");
         try{
             server = (SSLServerSocket) sslSocketFactory.createServerSocket(port);
             server.setEnabledCipherSuites(ciphersuites);

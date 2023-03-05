@@ -13,7 +13,8 @@ public class Client implements Runnable {
     private final String host;
     private final int port;
     private final String[] ciphersuites = // ALL THE CIPHER SUITES MINIMUM 256 BIT WE BALLLLLL
-            {"TLS_AES_256_GCM_SHA384",
+            {
+                    "TLS_AES_256_GCM_SHA384",
                     "TLS_CHACHA20_POLY1305_SHA256",
                     "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
                     "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
@@ -43,6 +44,10 @@ public class Client implements Runnable {
                     "TLS_EMPTY_RENEGOTIATION_INFO_SCSV"};
 
     public static void main(String[] args) throws IOException {
+        System.setProperty("javax.net.ssl.keyStore", "serverkeystore.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "password");
+        System.setProperty("javax.net.ssl.trustStore", "clienttruststore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword","password");
         new Client("127.0.0.1", 5000).run();
     }
 
@@ -52,6 +57,10 @@ public class Client implements Runnable {
     }
 
     public void run() {
+        System.setProperty("javax.net.ssl.keyStore", "serverkeystore.jks"); // temp for the certificates we currently have
+        System.setProperty("javax.net.ssl.keyStorePassword", "password");
+        System.setProperty("javax.net.ssl.trustStore", "clienttruststore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword","password");
         // connect client to server
         SSLSocket client = null;
         SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
